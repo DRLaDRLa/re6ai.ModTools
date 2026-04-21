@@ -4,9 +4,8 @@ import Component from "./Component";
 
 export default class LinkGrabber extends Component {
 
-    private pizzaDelivery = [
-        /^\/users\/18776\/?$/,
-        /^\/users\/203592\/?$/,
+    private iLoveRats = [
+        /^\/users\/11464\/?$/,
     ]
 
     public constructor() {
@@ -36,15 +35,15 @@ export default class LinkGrabber extends Component {
             id = parseInt(latest.text());
         } else
         */
-        
-        if(Page.matches(this.pizzaDelivery)) {
+
+        if(Page.matches(this.iLoveRats)) {
             const separator = $(`<li class="divider"></li>`).appendTo(menu);
             const container = $("<li>").appendTo(menu);
             const link = $("<a>")
                 .text("???")
                 .appendTo(container)
                 .on("click", () => {
-                    $("body").css("cursor", `url(${Util.DOM.getPizza()}), auto`);
+                    $("body").css("cursor", `url(${Util.DOM.getRat()}), auto`);
                     link.remove();
                     separator.remove();
                 });
