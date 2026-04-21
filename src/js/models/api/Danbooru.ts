@@ -218,7 +218,7 @@ export default class Danbooru {
 
     }
 
-    public static E621 = {
+    public static E6AI = {
 
         addDeferredPosts(posts: []): void {
             XM.Window["___deferred_posts"] = XM.Window["___deferred_posts"] || {}

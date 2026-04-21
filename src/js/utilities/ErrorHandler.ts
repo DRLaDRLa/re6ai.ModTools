@@ -7,7 +7,7 @@ export default class ErrorHandler {
 
     public static async write(message: string, error?: Error): Promise<void> {
         const notice = $("<div>").html([
-            `<p>RE621.ModTools had encountered an error during script execution.</p>`,
+            `<p>RE6AI.ModTools had encountered an error during script execution.</p>`,
             `<p>Please, report this message, including the error log below, through the <a href="${Script.url.issues}">issue tracker</a>, or in the <a href="${Script.url.thread}">forum thread</a>.</p>`,
         ].join("\n"));
         const textarea = $("<textarea>").val([

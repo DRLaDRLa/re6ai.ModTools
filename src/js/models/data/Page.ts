@@ -40,17 +40,17 @@ export default class Page {
 
     /**
      * Returns true if the search parameters has the provided key, false otherwise
-     * @param key 
+     * @param key
      */
     public static hasQueryParameter(key: string): boolean {
         return this.getInstance().url.searchParams.has(key);
     }
 
     /**
-     * Sets a query parameter in the current url  
+     * Sets a query parameter in the current url
      * If there is already one with the same key, it will get overridden
-     * @param key 
-     * @param value 
+     * @param key
+     * @param value
      */
     public static setQueryParameter(key: string, value: string): void {
         this.getInstance().url.searchParams.set(key, value);
@@ -78,7 +78,7 @@ export default class Page {
 
     /**
      * Returns the name of the current site
-     * @returns e621 or e926
+     * @returns e6ai
      */
     public static getSiteName(): string {
         return this.getInstance().url.hostname.replace(/\.net/g, "");

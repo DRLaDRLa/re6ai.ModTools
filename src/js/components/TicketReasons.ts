@@ -15,7 +15,7 @@ export default class TicketReasons extends Component {
 	private _resetButton?: JQuery<HTMLElement>;
 	private _greetingButton?: JQuery<HTMLElement>;
 	private container: JQuery<HTMLElement>;
-	/** 
+	/**
 	 * The name of the user that filed the report ticket.
 	 * Used for template variable replacement across both greetings & button text.
 	 **/
@@ -40,18 +40,13 @@ export default class TicketReasons extends Component {
 		return [
 			{ name: "Handled", text: "This ticket has been handled, thank you!" },
 			{ name: "Reviewed", text: "This ticket has been reviewed, thank you!" },
-			{ name: "NAT", text: `Thank you for the heads-up! We've reviewed the ticket and completed our investigation into the matter; however, we've decided it does not warrant action at this time.` },
-			{ name: "Closed", text: "This ticket has been closed." },
-			{ name: "Old (NAT)", text: "Thank you for your report, but that comment is from N years ago, & we do not punish people for comments older than 6 months." },
-			{ name: "Old (Hide)", text: "Thank you for your report, but that comment is from N years ago, & we do not punish people for comments older than 6 months. We've removed the comment." },
+			{ name: "NAT", text: "Thank you for the heads-up! We've reviewed the ticket and completed our investigation into the matter; however, we've decided it does not warrant action at this time." },
 			{ name: "Reply", text: "I believe that you tried to reply to a comment, but reported it instead.\nPlease, be more careful in the future." },
 			{ name: "Already (Rec)", text: "Thank you for your report, but this user has already received a record for this matter." },
 			{ name: "Already (Ban)", text: "Thank you for your report, but this user is already banned." },
-			{ name: "Blacklist", text: "Thank you for your report, but this post's content does not violate our \"\":[/help/uploading_guidelines].\nIf you find the contents of the post objectionable, we'd ask you to add the relevant tags (or the post's id itself) to your \"blacklist\":[/help/blacklist]." },
-			{ name: "Takedown", text: "Thank you for your report, but this matter needs to be handled via a takedown request.\nArtists, character owners, & commissioners may request a takedown \"here\":/static/takedown.\nWe do not accept third party takedowns." },
-			{ name: "DMed", text: "Thank you for your report, we've discussed the matter with them." },
-			{ name: "Flag (Del)", text: `${TicketReasons.flagText}The post has already been deleted by our janitors${TicketReasons.flagTextEnd}` },
-			{ name: "Flag (Flag)", text: `${TicketReasons.flagText}The post has already been flagged${TicketReasons.flagTextEnd}` },
+			{ name: "Blacklist", text: 'Thank you for your report, but this post\'s content does not violate our "uploading guidelines":[/help/uploading_guidelines].\nIf you find the contents of the post objectionable, we\'d ask you to add the relevant tags (or the post\'s id itself) to your "blacklist":[/help/blacklist].' },
+			{ name: "Takedown", text: 'Thank you for your report, but this matter needs to be handled via a takedown request.\nArtists/directors may request a takedown "here":/static/takedown.\nWe do not accept third party takedowns.' },
+			{ name: "DMed", text: "Thank you for your report, we've discussed the matter with them."},
 		];
 	}
 	public Settings = {
@@ -84,7 +79,7 @@ export default class TicketReasons extends Component {
 				return false;
 			});
 
-		
+
         // Get the name of the reporting user
         const rows = [...document.querySelectorAll<HTMLElement>("#c-tickets .section tr")];
         const req = rows.find(e=>e.innerText.includes("Requested by"));

@@ -64,7 +64,7 @@ files.push({
 });
 
 if (isDev) {
-    metadata.name = "RE621 ModTools Injector";
+    metadata.name = "RE6AI ModTools Injector";
     metadata.version = "10.0.0";
     delete metadata.updateURL;
     delete metadata.downloadURL;

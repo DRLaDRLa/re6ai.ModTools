@@ -10,13 +10,13 @@ export default class Script {
     }
     public static url = {
         website: "https://re621.app",
-        repo: "https://github.com/re621/re621.ModTools",
-        issues: "https://github.com/re621/re621.ModTools/issues",
-        thread: "https://e621.net/forum_topics/25872",
-        latest: "https://api.github.com/repos/re621/re621.ModTools/releases/latest",
+        repo: "https://github.com/DRLaDRLa/re6ai.ModTools",
+        issues: "https://github.com/DRLaDRLa/re6ai.ModTools/issues",
+        thread: "https://e6ai.net/forum_topics/227",
+        latest: "https://api.github.com/repos/DRLaDRLa/re6ai.ModTools/releases/latest",
         kofi: "https://ko-fi.com/bitWolfy",
     }
-    public static userAgent = "re621.ModTools/" + this.trimVersion(Script.version);
+    public static userAgent = "re6ai.ModTools/" + this.trimVersion(Script.version);
 
     private static trimVersion(value: string): string {
         const match = value.match(/(\d\.\d+)\.\d+/);

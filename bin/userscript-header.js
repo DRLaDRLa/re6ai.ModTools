@@ -10,15 +10,14 @@ module.exports = {
 
     homepageURL: pkg.homepage,
     supportURL: pkg.homepage + "/issues",
-    icon: "https://cdn.jsdelivr.net/gh/re621/re621@master/assets/icon64.png",
-    icon64: "https://cdn.jsdelivr.net/gh/re621/re621@master/assets/icon64.png",
+    icon: "https://cdn.jsdelivr.net/gh/re621/re6ai@master/assets/icon64.png",
+    icon64: "https://cdn.jsdelivr.net/gh/re621/re6ai@master/assets/icon64.png",
 
     updateURL: pkg.homepage + "/releases/latest/download/script.meta.js",
     downloadURL: pkg.homepage + "/releases/latest/download/script.user.js",
 
     match: [
-        "https://e621.net/*",
-        "https://e926.net/*",
+        "https://e6ai.net/*"
     ],
 
     require: [
@@ -44,7 +43,7 @@ module.exports = {
     ],
 
     connect: [
-        "static1.e621.net",
+        "static1.e6ai.net",
         "*",
     ],
 

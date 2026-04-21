@@ -182,7 +182,7 @@ export default class Modal {
     }
 
 	/**
-	 * 
+	 *
 	 * @returns The modal element
 	 */
     public getElement(): JQuery<HTMLElement> { return this.$modal; }
@@ -205,11 +205,11 @@ export default class Modal {
     }
 
 	/**
-	 * This class doesn't work unless re621 has added the `#modal-container` element, so this manually ensures it's added to enable it to work w/o re621.
+	 * This class doesn't work unless re6ai has added the `#modal-container` element, so this manually ensures it's added to enable it to work w/o re6ai.
 	 */
 	private static ensureModalContainer() {
 		if (!document.querySelector("#modal-container")) {
-			console.log("%c[RE621.ModTools]%c: no re621 detected; manually creating 'div#modal-container'...", "color: maroon", "color: unset");
+			console.log("%c[RE6AI.ModTools]%c: no re6ai detected; manually creating 'div#modal-container'...", "color: maroon", "color: unset");
 			$("<div>").attr("id", "modal-container").prependTo("div#page");
 		}
 	}
@@ -225,7 +225,7 @@ export interface ModalConfig {
     /** Modal content, created on page load */
     content?: JQuery<HTMLElement>;
     /**
-     * Optional. The modal content is replaced with this generated structure when the window is open.  
+     * Optional. The modal content is replaced with this generated structure when the window is open.
      * If used, the content parameter is used as a placeholder to properly size and center the window.
      */
     structure?: PreparedStructure;

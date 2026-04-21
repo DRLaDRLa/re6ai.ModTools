@@ -292,7 +292,7 @@ export default class Post {
                 md5: data.post.file.md5,
                 original: data.post.file.url,
                 sample: data.post.sample.url,
-                preview: `https://static1.e621.net/data/preview/${data.post.file.md5.substring(0, 2)}/${data.post.file.md5.substring(2, 4)}/${data.post.file.md5}.jpg`,
+                preview: `https://static1.e6ai.net/data/preview/${data.post.file.md5.substring(0, 2)}/${data.post.file.md5.substring(2, 4)}/${data.post.file.md5}.jpg`,
                 size: data.post.file.size,
             },
 
@@ -560,14 +560,14 @@ export default class Post {
 
         switch (type) {
             case "original":
-                return `https://static1.e621.net/data/${parts[0]}/${parts[1]}/${parts[2]}.${parts[3]}`
+                return `https://static1.e6ai.net/data/${parts[0]}/${parts[1]}/${parts[2]}.${parts[3]}`
             case "sample":
                 return ((options.width < 850 || options.height < 850 || options.extension == "gif")
-                    ? `https://static1.e621.net/data/${parts[0]}/${parts[1]}/${parts[2]}.${parts[3]}`
-                    : `https://static1.e621.net/data/sample/${parts[0]}/${parts[1]}/${parts[2]}.jpg`);
+                    ? `https://static1.e6ai.net/data/${parts[0]}/${parts[1]}/${parts[2]}.${parts[3]}`
+                    : `https://static1.e6ai.net/data/sample/${parts[0]}/${parts[1]}/${parts[2]}.jpg`);
             case "preview":
             default: {
-                return `https://static1.e621.net/data/preview/${parts[0]}/${parts[1]}/${parts[2]}.jpg`;
+                return `https://static1.e6ai.net/data/preview/${parts[0]}/${parts[1]}/${parts[2]}.jpg`;
             }
         }
     }
@@ -691,7 +691,7 @@ export namespace PostFlag {
 }
 
 /**
- * This represents two similar, yet slightly different formats.  
+ * This represents two similar, yet slightly different formats.
  * * TypeA is present exclusively on the search and favorites pages. It has the `favCount` parameters.
  * * TypeB is present on the profile page, comments index, and wiki pages. It has the `md5`, `width`, and `height` parameters.
  */
@@ -727,7 +727,7 @@ interface PostDataTypeAB {
 }
 
 /**
- * This represents a unique format, available only on the post page.  
+ * This represents a unique format, available only on the post page.
  * It includes a copy of itself within itself, with slightly different data sets.
  */
 interface PostDataTypeC {
@@ -772,7 +772,7 @@ interface PostDataTypeC {
             has: true,
             height: 637,
             width: 850,
-            url: "https://static1.e621.net/data/sample/33/6e/336ec494422113f0aaf5e879470603ac.jpg",
+            url: "https://static1.e6ai.net/data/sample/33/6e/336ec494422113f0aaf5e879470603ac.jpg",
             alternates?: {
                 "720p"?: AlternateType,
                 "480p"?: AlternateType,

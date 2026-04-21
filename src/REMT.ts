@@ -30,7 +30,7 @@ export default class REMT {
         TicketReasons,
 
         LinkGrabber,
-		
+
 		DMailToStaffNote,
 		OldCommentTicket,
 		DMailBuilder,
@@ -41,7 +41,7 @@ export default class REMT {
 
         if (Page.matches(IgnoredPages)) return;
 
-        console.log("%c[RE621.ModTools]%c v." + Script.version, "color: maroon", "color: unset");
+        console.log("%c[RE6AI.ModTools]%c v." + Script.version, "color: maroon", "color: unset");
 
         // Set up the API connection
         // TODO Temporary instantiation method
@@ -93,14 +93,14 @@ export default class REMT {
             REMT.Registry[instance.getName()] = instance;
             await instance.bootstrapSettings();
         }
-        Util.Events.trigger("re621-mt:bootstrap");
+        Util.Events.trigger("re6ai-mt:bootstrap");
 
         // Load modules (asynchronous)
         const promises: Promise<void>[] = [];
         for (const instance of Object.values(REMT.Registry))
             promises.push(instance.load());
         Promise.all(promises).then(() => {
-            console.log("%c[RE621.ModTools]%c loaded", "color: maroon", "color: unset");
+            console.log("%c[RE6AI.ModTools]%c loaded", "color: maroon", "color: unset");
         });
     }
 

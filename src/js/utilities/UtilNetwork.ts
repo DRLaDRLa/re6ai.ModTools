@@ -11,11 +11,11 @@ export class UtilNetwork {
         if (!navigator.onLine) return Promise.resolve(false);
 
         // Fallback method
-        // Tries to make a HEAD request to e621.net, and checks if it works
+        // Tries to make a HEAD request to e6ai.net, and checks if it works
         return new Promise((resolve) => {
             XM.Connect.xmlHttpRequest({
                 method: "HEAD",
-                url: window.location.host == "e621.net" ? "https://e621.net/" : "https://e926.net/",
+                url: "https://e6ai.net/",
                 onerror: () => { resolve(false); },
                 onload: () => { resolve(true); },
             });

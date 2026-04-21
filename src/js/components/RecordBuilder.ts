@@ -233,7 +233,7 @@ export default class RecordBuilder extends Component {
     }
 
     private generateRecordText() {
-        // console.log("%c[RE621.ModTools]%c Updating Record Text", "color: maroon", "color: unset");
+        // console.log("%c[RE6AI.ModTools]%c Updating Record Text", "color: maroon", "color: unset");
 
         const result = [];
 
@@ -272,12 +272,12 @@ export default class RecordBuilder extends Component {
                 }
                 ruleLines.push((ruleLine.startsWith("*") ? "*" : "* ") + ruleLine);
             }
-            
+
             rulesOutput.push(`[section=${ruleData.title}]\n` +
-                (ruleData.preface ? (ruleData.preface + "\n\n") : "") + 
+                (ruleData.preface ? (ruleData.preface + "\n\n") : "") +
                 `${ruleLines.join("\n")}\n\n` +
-                (ruleData.postface ? (ruleData.postface + "\n\n") : "") + 
-                `"[Code of Conduct - ${ruleData.title}]":${ruleData.link ? ruleData.link : `/wiki_pages/e621:rules#${name.toLowerCase()}`}\n` +
+                (ruleData.postface ? (ruleData.postface + "\n\n") : "") +
+                `"[Code of Conduct - ${ruleData.title}]":${ruleData.link ? ruleData.link : `/wiki_pages/e6ai:rules#${name.toLowerCase()}`}\n` +
                 `[/section]`
             );
         }
@@ -298,7 +298,7 @@ export default class RecordBuilder extends Component {
         function processSource(source: string): string {
             return decodeURI(source)
                 .trim()
-                .replace(/https:\/\/e(?:621|926).net\//g, "/")              // Make links relative
+                .replace(/https:\/\/e6ai.net\//g, "/")              // Make links relative
                 .replace(/\/posts\/(\d+)#comment-(\d+)/g, "/comments/$2")   // Convert comment links
                 .replace(/\/forum_topics\/(\d+)(?:\?page=\d+)?#forum_post_(\d+)/g, "/forum_posts/$2")   // Convert forum post links
                 .replace(/\?lr=\d+&/, "?")                                  // Trim the tag history links
