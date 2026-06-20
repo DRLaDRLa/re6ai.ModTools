@@ -6,6 +6,7 @@ import LinkGrabber from "./js/components/LinkGrabber";
 import RecordBuilder from "./js/components/RecordBuilder";
 import TicketData from "./js/components/TicketData";
 import TicketReasons from "./js/components/TicketReasons";
+import AppealReasons from "./js/components/AppealReasons";
 import Page, { IgnoredPages } from "./js/models/data/Page";
 import Script from "./js/models/data/Script";
 import User from "./js/models/data/User";
@@ -14,7 +15,7 @@ import PageObserver from "./js/models/structure/PageObserver";
 import ErrorHandler from "./js/utilities/ErrorHandler";
 import Util from "./js/utilities/Util";
 import DMailToStaffNote from "./js/components/DMailToStaffNote";
-import ReportedContentAge from "./js/components/ReportedContentAge";
+import ReportContentData from "./js/components/ReportContentData";
 import DMailBuilder from "./js/components/DMailBuilder";
 import ForumBuilder from "./js/components/ForumBuilder";
 
@@ -29,10 +30,12 @@ export default class REMT {
         TicketData,
         TicketReasons,
 
+        AppealReasons,
+
         LinkGrabber,
 
 		DMailToStaffNote,
-		ReportedContentAge,
+    ReportContentData,
 		DMailBuilder,
 		ForumBuilder,
     ];
@@ -113,10 +116,12 @@ interface ComponentListAnnotated extends ComponentList {
     TicketData?: TicketData,
     TicketReasons?: TicketReasons,
 
+    AppealReasons?: AppealReasons,
+
     LinkGrabber?: LinkGrabber,
 
     DMailToStaffNote?: DMailToStaffNote,
-    ReportedContentAge?: ReportedContentAge,
+    ReportContentData?: ReportContentData,
     DMailBuilder?: DMailBuilder,
     ForumBuilder?: ForumBuilder,
 }
