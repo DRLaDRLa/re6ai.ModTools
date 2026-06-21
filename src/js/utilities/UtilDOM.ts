@@ -65,7 +65,7 @@ export class UtilDOM {
             .appendTo($tab);
 
         if (config.onClick !== undefined)
-            $link.on("click", () => { config.onClick($link); });
+            $link.on("click", () => { config.onClick?.($link); });
 
         if (config.href) { $link.attr("href", config.href); }
         if (config.tabClass) { $tab.addClass(config.tabClass); }
@@ -125,144 +125,6 @@ export class UtilDOM {
 		return s;
 	}
 
-	// /**
-	//  * Build a DText input element with the same style, form, & function of the ones supplied by the server.
-	//  * @param textarea The main text entry element.
-	//  * @param options
-	//  * @returns Either the root element or an array w/ the root element & the help text.
-	//  * @todo Better utilize `innerHTML` to slim down.
-	//  * @todo Turn into a web component for consistent interop.
-	//  */
-	// public static buildDTextInput(textarea: HTMLTextAreaElement, options?: DTextInputOptions): HTMLDivElement | HTMLElement[] {
-	// 	const root = document.createElement("div");
-	// 	root.className = "dtext-formatter"
-	// 	root.dataset.editing = "true"
-	// 	root.dataset.initialized = "false"
-	// 	root.setAttribute("data-allow-color", (options?.allow_color || false) + "");
-	// 	const tabs = document.createElement("div");
-	// 	root.appendChild(tabs);
-	// 	tabs.className = "dtext-formatter-tabs";
-	// 	const write = document.createElement("a");
-	// 	tabs.appendChild(write)
-	// 	write.dataset.action = "edit";
-	// 	write.setAttribute("role", "tab");
-	// 	write.innerText = "Write";
-	// 	const previewTab = document.createElement("a");
-	// 	tabs.appendChild(previewTab)
-	// 	previewTab.dataset.action = "show";
-	// 	previewTab.setAttribute("role", "tab");
-	// 	previewTab.innerText = "Preview";
-
-	// 	const toolbar = document.createElement("div");
-	// 	root.appendChild(toolbar);
-	// 	toolbar.className = "dtext-formatter-buttons";
-	// 	toolbar.setAttribute("role", "toolbar");
-
-	// 	const bBold = document.createElement("a");
-	// 	toolbar.appendChild(bBold);
-	// 	bBold.title = "Bold";
-	// 	bBold.dataset.content = "[b]%selection%[/b]";
-	// 	const bBoldI = document.createElement("i");
-	// 	bBold.appendChild(bBoldI);
-	// 	bBoldI.className = "fa-solid fa-bold";
-
-	// 	const bItalics = document.createElement("a");
-	// 	toolbar.appendChild(bItalics);
-	// 	bItalics.title = "Italics";
-	// 	bItalics.dataset.content = "[i]%selection%[/i]";
-	// 	const bItalicsI = document.createElement("i");
-	// 	bItalics.appendChild(bItalicsI);
-	// 	bItalicsI.className = "fa-solid fa-italic";
-
-	// 	const bStrikethrough = document.createElement("a");
-	// 	toolbar.appendChild(bStrikethrough);
-	// 	bStrikethrough.title = "Strikethrough";
-	// 	bStrikethrough.dataset.content = "[s]%selection%[/s]";
-	// 	const bStrikethroughI = document.createElement("i");
-	// 	bStrikethrough.appendChild(bStrikethroughI);
-	// 	bStrikethroughI.className = "fa-solid fa-strikethrough";
-
-	// 	const bUnderline = document.createElement("a");
-	// 	toolbar.appendChild(bUnderline);
-	// 	bUnderline.title = "Underline";
-	// 	bUnderline.dataset.content = "[u]%selection%[/u]";
-	// 	const bUnderlineI = document.createElement("i");
-	// 	bUnderline.appendChild(bUnderlineI);
-	// 	bUnderlineI.className = "fa-solid fa-underline";
-
-	// 	const spacer = document.createElement("span");
-	// 	toolbar.appendChild(spacer);
-	// 	spacer.className = "spacer";
-
-	// 	const bHeader = document.createElement("a");
-	// 	toolbar.appendChild(bHeader);
-	// 	bHeader.title = "Header";
-	// 	bHeader.dataset.content = "h2.%selection%";
-	// 	const bHeaderI = document.createElement("i");
-	// 	bHeader.appendChild(bHeaderI);
-	// 	bHeaderI.className = "fa-solid fa-heading";
-
-	// 	const bSpoiler = document.createElement("a");
-	// 	toolbar.appendChild(bSpoiler);
-	// 	bSpoiler.title = "Spoiler";
-	// 	bSpoiler.dataset.content = "[spoiler]%selection%[/spoiler]";
-	// 	const bSpoilerI = document.createElement("i");
-	// 	bSpoiler.appendChild(bSpoilerI);
-	// 	bSpoilerI.className = "fa-solid fa-eye-slash";
-
-	// 	const bCode = document.createElement("a");
-	// 	toolbar.appendChild(bCode);
-	// 	bCode.title = "Code";
-	// 	bCode.dataset.content = "[code]%selection%[/code]";
-	// 	const bCodeI = document.createElement("i");
-	// 	bCode.appendChild(bCodeI);
-	// 	bCodeI.className = "fa-solid fa-code";
-
-	// 	const bQuote = document.createElement("a");
-	// 	toolbar.appendChild(bQuote);
-	// 	bQuote.title = "Quote";
-	// 	bQuote.dataset.content = "[quote]%selection%[/quote]";
-	// 	const bQuoteI = document.createElement("i");
-	// 	bQuote.appendChild(bQuoteI);
-	// 	bQuoteI.className = "fa-solid fa-quote-right";
-
-	// 	root.appendChild(textarea);
-	// 	if (!textarea.classList.contains("dtext-formatter-input"))
-	// 		textarea.classList.add("dtext-formatter-input");
-	// 	if ((!options?.limit) || options.limit < 0) {
-	// 		textarea.removeAttribute("maxlength");
-	// 	} else {
-	// 		textarea.maxLength = options.limit;
-	// 	}
-
-	// 	const preview = document.createElement("div");
-	// 	root.appendChild(preview);
-	// 	preview.className = "dtext-formatter-preview dtext-container";
-
-	// 	const charCount = document.createElement("div");
-	// 	root.appendChild(charCount);
-	// 	charCount.className = "dtext-formatter-charcount";
-	// 	charCount.dataset.limit = `${options?.limit || 0}`;
-	// 	charCount.dataset.count = `${options?.count || 0}`;
-
-	// 	if (!options?.showHelpText) {
-	// 		if (options?.container) {
-	// 			options.container.appendChild(root);
-	// 			Danbooru.DText.initialize_input($(root));
-	// 		}
-	// 		return root;
-	// 	}
-	// 	const help = document.createElement("span");
-	// 	help.className = "hint";
-	// 	help.innerHTML = 'All text is formatted using <a href="/help/dtext" target="_blank" rel="noopener" tabindex="-1">DText</a>';
-	// 	if (options?.container) {
-	// 		options.container.appendChild(root);
-	// 		options.container.appendChild(help);
-	// 		Danbooru.DText.initialize_input($(root));
-	// 	}
-	// 	return [root, help];
-	// }
-
 	/**
 	 * Build a DText input element with the same style, form, & function of the ones supplied by the server.
 	 * @param textarea The main text entry element.
@@ -271,162 +133,9 @@ export class UtilDOM {
 	 * @todo Better utilize `innerHTML` to slim down.
 	 * @todo Turn into a web component for consistent interop.
 	 */
-	public static buildDTextInput(textarea: HTMLTextAreaElement, options?: DTextInputOptions): HTMLDivElement | HTMLElement[] {
+	public static buildDTextInput(textarea: HTMLTextAreaElement): HTMLDivElement | HTMLElement[] {
 			return Danbooru.DTextFormatter?.buildFromTextarea(textarea);
-		const root = document.createElement("div");
-		root.className = "dtext-formatter"
-		root.dataset.editing = "true"
-		root.dataset.initialized = "false"
-		root.setAttribute("data-allow-color", (options?.allow_color || false) + "");
-		const tabs = document.createElement("div");
-		root.appendChild(tabs);
-		tabs.className = "dtext-formatter-tabs";
-		const write = document.createElement("a");
-		tabs.appendChild(write)
-		write.dataset.action = "edit";
-		write.setAttribute("role", "tab");
-		write.innerText = "Write";
-		const previewTab = document.createElement("a");
-		tabs.appendChild(previewTab)
-		previewTab.dataset.action = "show";
-		previewTab.setAttribute("role", "tab");
-		previewTab.innerText = "Preview";
-
-		const toolbar = document.createElement("div");
-		root.appendChild(toolbar);
-		toolbar.className = "dtext-formatter-buttons";
-		toolbar.setAttribute("role", "toolbar");
-
-		const bBold = document.createElement("a");
-		toolbar.appendChild(bBold);
-		bBold.title = "Bold";
-		bBold.dataset.content = "[b]%selection%[/b]";
-		const bBoldI = document.createElement("i");
-		bBold.appendChild(bBoldI);
-		bBoldI.className = "fa-solid fa-bold";
-
-		const bItalics = document.createElement("a");
-		toolbar.appendChild(bItalics);
-		bItalics.title = "Italics";
-		bItalics.dataset.content = "[i]%selection%[/i]";
-		const bItalicsI = document.createElement("i");
-		bItalics.appendChild(bItalicsI);
-		bItalicsI.className = "fa-solid fa-italic";
-
-		const bStrikethrough = document.createElement("a");
-		toolbar.appendChild(bStrikethrough);
-		bStrikethrough.title = "Strikethrough";
-		bStrikethrough.dataset.content = "[s]%selection%[/s]";
-		const bStrikethroughI = document.createElement("i");
-		bStrikethrough.appendChild(bStrikethroughI);
-		bStrikethroughI.className = "fa-solid fa-strikethrough";
-
-		const bUnderline = document.createElement("a");
-		toolbar.appendChild(bUnderline);
-		bUnderline.title = "Underline";
-		bUnderline.dataset.content = "[u]%selection%[/u]";
-		const bUnderlineI = document.createElement("i");
-		bUnderline.appendChild(bUnderlineI);
-		bUnderlineI.className = "fa-solid fa-underline";
-
-		const spacer = document.createElement("span");
-		toolbar.appendChild(spacer);
-		spacer.className = "spacer";
-
-		const bHeader = document.createElement("a");
-		toolbar.appendChild(bHeader);
-		bHeader.title = "Header";
-		bHeader.dataset.content = "h2.%selection%";
-		const bHeaderI = document.createElement("i");
-		bHeader.appendChild(bHeaderI);
-		bHeaderI.className = "fa-solid fa-heading";
-
-		const bSpoiler = document.createElement("a");
-		toolbar.appendChild(bSpoiler);
-		bSpoiler.title = "Spoiler";
-		bSpoiler.dataset.content = "[spoiler]%selection%[/spoiler]";
-		const bSpoilerI = document.createElement("i");
-		bSpoiler.appendChild(bSpoilerI);
-		bSpoilerI.className = "fa-solid fa-eye-slash";
-
-		const bCode = document.createElement("a");
-		toolbar.appendChild(bCode);
-		bCode.title = "Code";
-		bCode.dataset.content = "[code]%selection%[/code]";
-		const bCodeI = document.createElement("i");
-		bCode.appendChild(bCodeI);
-		bCodeI.className = "fa-solid fa-code";
-
-		const bQuote = document.createElement("a");
-		toolbar.appendChild(bQuote);
-		bQuote.title = "Quote";
-		bQuote.dataset.content = "[quote]%selection%[/quote]";
-		const bQuoteI = document.createElement("i");
-		bQuote.appendChild(bQuoteI);
-		bQuoteI.className = "fa-solid fa-quote-right";
-
-		root.appendChild(textarea);
-		if (!textarea.classList.contains("dtext-formatter-input"))
-			textarea.classList.add("dtext-formatter-input");
-		if ((!options?.limit) || options.limit < 0) {
-			textarea.removeAttribute("maxlength");
-		} else {
-			textarea.maxLength = options.limit;
-		}
-
-		const preview = document.createElement("div");
-		root.appendChild(preview);
-		preview.className = "dtext-formatter-preview dtext-container";
-
-		const charCount = document.createElement("div");
-		root.appendChild(charCount);
-		charCount.className = "dtext-formatter-charcount";
-		charCount.dataset.limit = `${options?.limit || 0}`;
-		charCount.dataset.count = `${options?.count || 0}`;
-
-		if (!options?.showHelpText) {
-			if (options?.container) {
-				options.container.appendChild(root);
-				// Danbooru.DText.initialize_input($(root));
-			}
-			return root;
-		}
-		const help = document.createElement("span");
-		help.className = "hint";
-		help.innerHTML = 'All text is formatted using <a href="/help/dtext" target="_blank" rel="noopener" tabindex="-1">DText</a>';
-		if (options?.container) {
-			options.container.appendChild(root);
-			options.container.appendChild(help);
-			// Danbooru.DText.initialize_input($(root));
-		}
-		return [root, help];
 	}
-
-	// public static getDTextInput(textarea: string, limit: number, allow_color = false) {
-	// 	return `
-	// 	<div class="dtext-formatter" data-editing="true" data-initialized="false" data-allow-color="${allow_color}">
-	// 	  <div class="dtext-formatter-tabs">
-	// 	    <a data-action="edit" role="tab">Write</a>
-	// 	    <a data-action="show" role="tab">Preview</a>
-	// 	  </div>
-	// 	  <div class="dtext-formatter-buttons" role="toolbar">
-	// 	    <a title="Bold" data-content="[b]%selection%[/b]"><i class="fa-solid fa-bold"></i></a>
-	// 	    <a title="Italics" data-content="[i]%selection%[/i]"><i class="fa-solid fa-italic"></i></a>
-	// 	    <a title="Strikethrough" data-content="[s]%selection%[/s]"><i class="fa-solid fa-strikethrough"></i></a>
-	// 	    <a title="Underline" data-content="[u]%selection%[/u]"><i class="fa-solid fa-underline"></i></a>
-	// 	    <span class="spacer"></span>
-	// 	    <a title="Header" data-content="h2.%selection%"><i class="fa-solid fa-heading"></i></a>
-	// 	    <a title="Spoiler" data-content="[spoiler]%selection%[/spoiler]"><i class="fa-solid fa-eye-slash"></i></a>
-	// 	    <a title="Code" data-content="[code]%selection%[/code]"><i class="fa-solid fa-code"></i></a>
-	// 	    <a title="Quote" data-content="[quote]%selection%[/quote]"><i class="fa-solid fa-quote-right"></i></a>
-	// 	  </div>
-	// 	  ${textarea}
-	// 	  <div class="dtext-formatter-preview dtext-container"></div>
-	// 	  <div class="dtext-formatter-charcount" data-limit="${limit || 0}"></div>
-	// 	</div>
-	// 	<span class="hint">All text is formatted using <a href="/help/dtext" target="_blank" rel="noopener" tabindex="-1">DText</a></span>
-	// 	`;
-	// }
 
     static getPlaceholderImage(): string {
         return "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
@@ -436,18 +145,22 @@ export class UtilDOM {
         return "data:image/png;base64,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";
     }
 
+    /** Throws an error if the element isn't found. */
+    public static querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K, parentElement?: Element | Document): HTMLElementTagNameMap[K];
+    /** Throws an error if the element isn't found. */
+    public static querySelector<K extends keyof SVGElementTagNameMap>(selectors: K, parentElement?: Element | Document): SVGElementTagNameMap[K];
+    /** Throws an error if the element isn't found. */
+    // public static querySelector<K extends keyof MathMLElementTagNameMap>(selectors: K, parentElement?: Element | Document): MathMLElementTagNameMap[K];
+    /** Throws an error if the element isn't found. */
+    public static querySelector<K extends Element>(selectors: string, parentElement?: Element | Document): K;
+    /** Throws an error if the element isn't found. */
+    public static querySelector<K extends string>(selectors: K, parentElement: Element | Document = document): Element {
+      const e = parentElement.querySelector(selectors);
+      if (!e) throw new Error(`Expected DOM element not found (\`${selectors}}\`).`);
+      return e;
+    }
 }
 
-export interface DTextInputOptions {
-	/** Character limit; used for indicator text (& for our inputs, validation). */
-	limit?: number;
-	/** Starting character count. */
-	count?: number;
-	allow_color?: boolean;
-	showHelpText?: boolean;
-	/** If provided, will automatically add it to the element & attempt to initialize the DTextInput; this will fail if this container element is not already attached to the DOM tree. */
-    container?: HTMLElement;
-}
 interface SettingsButton {
 
     /** Unique button ID */

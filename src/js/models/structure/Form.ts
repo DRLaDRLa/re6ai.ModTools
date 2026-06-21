@@ -2,6 +2,7 @@ import Component from "../../components/Component";
 import Util from "../../utilities/Util";
 import XM from "../api/XM";
 import KeybindManager from "../data/Keybinds";
+import Debug from "../Debug";
 import PreparedStructure from "./PreparedStructure";
 
 /**
@@ -10,13 +11,16 @@ import PreparedStructure from "./PreparedStructure";
  */
 export class Form implements PreparedStructure {
 
-    private static inputTimeout = 500;          // Typing timeout on text input fields
+    /** Typing timeout on text input fields */
+    private static readonly inputTimeout = 500;
 
-    private created: boolean;                   // Used for caching, true if get() has been called before
-    private element: JQuery<HTMLElement>;       // DOM element for the form
-    private content: FormElement[];            // Array of form elements
+    /** Used for caching, true if get() has been called before */
+    private created = false;
 
-    private inputList: Map<string, JQuery<HTMLElement>>;
+    /** DOM element for the form */
+    private readonly element: JQuery<HTMLElement>;
+
+    private readonly inputList: Map<string, JQuery<HTMLElement>>;
 
     /**
      * Prepares the form structure and settings.  
@@ -25,7 +29,11 @@ export class Form implements PreparedStructure {
      * @param content Form elements
      * @param onSubmit Form submission callback
      */
-    public constructor(options?: SectionOptions, content?: FormElement[], onSubmit?: FormSubmitEvent) {
+    public constructor(
+      options: SectionOptions = {},
+      private readonly content: FormElement[] = [],
+      onSubmit?: FormSubmitEvent,
+    ) {
         if (!options.name) options.name = Util.ID.make();
         if (!options.columns) options.columns = 1;
         if (!options.width) options.width = options.columns;
@@ -42,12 +50,11 @@ export class Form implements PreparedStructure {
                 const values = {};
                 this.inputList.forEach((input, name) => {
                     if (input.attr("type") == "checkbox") values[name] = input.is(":checked");
-                    else values[name] = input.val().toString();
+                    else values[name] = input.val()?.toString() ?? "";
                 });
-                onSubmit(values, this);
+                onSubmit?.(values, this);
             });
 
-        this.content = content;
         this.inputList = new Map();
     }
 
@@ -60,7 +67,9 @@ export class Form implements PreparedStructure {
 
         // Build form elements
         this.element[0].innerHTML = "";
-        const formID = this.element.attr("id");
+        if (!this.element.attr("id")) Debug.log("WARN: Form.element has no id; giving it a unique id...");
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const formID = this.element.attr("id") || this.element.uniqueId().attr("id") || "!!NO-FORM-ID-FOUND!!";
 
         for (const entry of this.content) {
             for (const childElem of entry.build(formID, force))
@@ -127,17 +136,17 @@ export class Form implements PreparedStructure {
      * @param options Section configuration
      * @param content Form elements
      */
-    public static section(options?: SectionOptions, content?: FormElement[]): FormElement {
+    public static section(options: SectionOptions = {}, content?: FormElement[]): FormElement {
         if (!options.name) options.name = Util.ID.make();
         if (!options.columns) options.columns = 1;
         if (!options.width) options.width = options.columns;
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
         const $element = $("<form-section>")
-            .toggleClass(options.wrapper, options.wrapper)
+            .toggleClass(options.wrapper ?? "", options.wrapper)
             .attr({
                 "id": options.name,
                 "labeled": options.label !== undefined ? "" : undefined,
@@ -154,17 +163,17 @@ export class Form implements PreparedStructure {
      * @param options Section configuration
      * @param content Form elements
      */
-    public static accordion(options?: SectionOptions & { active?: boolean | number; collapsible?: boolean }, content?: FormAccordionElement[]): FormElement {
+    public static accordion(options: SectionOptions & { active?: boolean | number; collapsible?: boolean } = {}, content?: FormAccordionElement[]): FormElement {
         if (!options.name) options.name = Util.ID.make();
         if (!options.columns) options.columns = 1;
         if (!options.width) options.width = options.columns;
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
         const $element = $("<form-accordion>")
-            .toggleClass(options.wrapper, options.wrapper)
+            .toggleClass(options.wrapper ?? "", options.wrapper)
             .attr({
                 "id": options.name,
                 "labeled": options.label !== undefined ? "" : null,
@@ -185,7 +194,7 @@ export class Form implements PreparedStructure {
         });
     }
 
-    public static accordionTab(options?: SectionOptions & { badge?: JQuery<HTMLElement>; subheader?: string }, content?: FormElement[]): FormElement {
+    public static accordionTab(options: SectionOptions & { badge?: JQuery<HTMLElement>; subheader?: string } = {}, content?: FormElement[]): FormElement {
         if (!options.name) options.name = Util.ID.make();
         if (!options.columns) options.columns = 1;
         if (!options.width) options.width = options.columns;
@@ -223,12 +232,12 @@ export class Form implements PreparedStructure {
      * @param options Section configuration
      * @param content Form elements
      */
-    public static collapse(options?: SectionOptions & { title?: string; badge?: JQuery<HTMLElement>; collapsed?: boolean }, content?: FormElement[], onActivate?: (id: string, state: boolean) => void): FormElement {
+    public static collapse(options: SectionOptions & { title?: string; badge?: JQuery<HTMLElement>; collapsed?: boolean } = {}, content?: FormElement[], onActivate?: (id: string, state: boolean) => void): FormElement {
         if (!options.name) options.name = Util.ID.make();
         if (!options.columns) options.columns = 1;
         if (!options.width) options.width = options.columns;
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -264,7 +273,7 @@ export class Form implements PreparedStructure {
             header: "h3",
             beforeActivate: () => {
                 if (onActivate == undefined) return;
-                onActivate(header.attr("id"), header.attr("aria-expanded") == "true");
+                onActivate(header.attr("id") ?? "", header.attr("aria-expanded") == "true");
             },
         });
 
@@ -276,10 +285,10 @@ export class Form implements PreparedStructure {
      * @param options Element configuration
      * @param changed Input change callback
      */
-    public static input(options?: InputElementOptions, changed?: InputChangeEvent<string>): FormElement {
+    public static input(options: InputElementOptions = {}, changed?: InputChangeEvent<string>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -329,7 +338,7 @@ export class Form implements PreparedStructure {
             $input.on("input", () => {
                 if (timer) clearTimeout(timer);
                 timer = window.setTimeout(
-                    () => { changed($input.val().toString(), $input); },
+                    () => { changed($input.val()?.toString() ?? "", $input); },
                     Form.inputTimeout
                 );
             });
@@ -343,10 +352,10 @@ export class Form implements PreparedStructure {
      * @param options Element configuration
      * @param changed Input change callback
      */
-    public static textarea(options?: InputElementOptions, changed?: InputChangeEvent<string>): FormElement {
+    public static textarea(options: InputElementOptions = {}, changed?: InputChangeEvent<string>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -397,7 +406,7 @@ export class Form implements PreparedStructure {
             $input.on("input", () => {
                 if (timer) clearTimeout(timer);
                 timer = window.setTimeout(
-                    () => { changed($input.val().toString(), $input); },
+                    () => { changed($input.val()?.toString() ?? "", $input); },
                     Form.inputTimeout
                 );
             });
@@ -410,10 +419,10 @@ export class Form implements PreparedStructure {
      * Creates a copy input FormElement based on the provided parameters  
      * @param options Element configuration
      */
-    public static copy(options?: ElementOptions): FormElement {
+    public static copy(options: ElementOptions = {}): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -478,10 +487,10 @@ export class Form implements PreparedStructure {
      * Creates a key input FormElement based on the provided parameters  
      * @param options Element configuration
      */
-    public static key(options?: ElementOptions, changed?: InputChangeEvent<string>): FormElement {
+    public static key(options: ElementOptions = {}, changed?: InputChangeEvent<string>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -609,11 +618,12 @@ export class Form implements PreparedStructure {
      * Creates a file input FormElement based on the provided parameters  
      * @param options Element configuration
      * TODO Changed function type
+     * IDEA: Type to accepted MIME types?
      */
-    public static file(options?: ElementOptions & { accept: string }, changed?: InputChangeEvent<unknown>): FormElement {
+    public static file(options: ElementOptions & { accept: string }, changed?: InputChangeEvent<unknown>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -642,10 +652,10 @@ export class Form implements PreparedStructure {
         return new FormElement($element, $input, $label);
     }
 
-    public static icon(options?: ElementOptions, content?: { [name: string]: any }, changed?: InputChangeEvent<string>): FormElement {
+    public static icon(options: ElementOptions = {}, content?: { [name: string]: any }, changed?: InputChangeEvent<string>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -695,10 +705,10 @@ export class Form implements PreparedStructure {
             $selectContainer.find("a").removeClass("active");
 
             const $target = $(event.target);
-            $input.val($target.attr("data-value"));
+            $input.val($target.attr("data-value") ?? "");
             $target.addClass("active");
 
-            if (changed) changed($input.val().toString(), $input);
+            if (changed) changed($input.val()?.toString() ?? "", $input);
         });
 
         if (options.value) { $selectContainer.find("a[data-value='" + options.value + "']").first().trigger("click"); }
@@ -720,10 +730,10 @@ export class Form implements PreparedStructure {
      * @param options Element configuration
      * @param changed Input change callback
      */
-    public static button(options?: ElementOptions & { "type"?: "submit" | "button" }, changed?: InputChangeEvent<true>): FormElement {
+    public static button(options: ElementOptions & { "type"?: "submit" | "button" } = {}, changed?: InputChangeEvent<true>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -773,7 +783,7 @@ export class Form implements PreparedStructure {
      * @param options Element configuration
      * @param changed Input change callback
      */
-    public static checkbox(options?: ElementOptions, changed?: InputChangeEvent<boolean>): FormElement {
+    public static checkbox(options: ElementOptions = {}, changed?: InputChangeEvent<boolean>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
         const $element = FormUtils
@@ -822,7 +832,7 @@ export class Form implements PreparedStructure {
 
         if (options.sync)
             options.sync.base.on("settings." + options.sync.tag + "-remote", (_event, data) => {
-                if (options.sync.inverted) data = !data;
+                if (options.sync?.inverted) data = !data;
                 $input.prop("checked", data);
             });
 
@@ -838,10 +848,10 @@ export class Form implements PreparedStructure {
      * @param content Select options data
      * @param changed Input change callback
      */
-    public static select(options?: ElementOptions, content?: SelectOptionSet | SelectOptionFunction, changed?: InputChangeEvent<string>): FormElement {
+    public static select(options: ElementOptions = {}, content?: SelectOptionSet | SelectOptionFunction, changed?: InputChangeEvent<string>): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -888,7 +898,7 @@ export class Form implements PreparedStructure {
             });
 
         if (changed !== undefined)
-            $input.on("change", () => { changed($input.val().toString(), $input); });
+            $input.on("change", () => { changed($input.val()?.toString() ?? "", $input); });
 
         return new FormElement($element, $input, $label);
     }
@@ -914,10 +924,10 @@ export class Form implements PreparedStructure {
      * Creates a div FormElement based on the provided parameters  
      * @param options Element configuration
      */
-    public static div(options?: ElementOptions): FormElement {
+    public static div(options: ElementOptions = {}): FormElement {
         if (!options.name) options.name = Util.ID.make();
 
-        let $label: JQuery<HTMLElement>;
+        let $label: JQuery<HTMLElement> | undefined;
         if (options.label)
             $label = FormUtils.makeLabel(options.name, options.label);
 
@@ -938,6 +948,7 @@ export class Form implements PreparedStructure {
                 }
                 default: {
                     $element.html(options.value + "");
+                    break;
                 }
             }
         }
@@ -1008,7 +1019,7 @@ class FormUtils {
             .html(text);
     }
 
-    public static makeInputWrapper(label: string, wrapper: string, width = 1): JQuery<HTMLElement> {
+    public static makeInputWrapper(label?: string, wrapper?: string, width = 1): JQuery<HTMLElement> {
         return $("<form-input>")
             .addClass(wrapper ? " " + wrapper : "")
             .attr({
@@ -1021,14 +1032,7 @@ class FormUtils {
 
 export class FormElement {
 
-    private created: boolean;
-
-    private wrapper: JQuery<HTMLElement>;
-    private input: JQuery<HTMLElement>;
-    private label: JQuery<HTMLElement>;
-    private content: FormElement[];
-    private container: JQuery<HTMLElement>;
-    private postProcessing: (wrapper: JQuery<HTMLElement>) => void;
+    private created = false;
 
     /**
      * Constructs a form element based on provided data.  
@@ -1041,23 +1045,23 @@ export class FormElement {
      * @param postProcessing Function to run after the object has been built. Takes the wrapper as a parameter.
      */
     public constructor(
-        wrapper: JQuery<HTMLElement>,
-        input?: JQuery<HTMLElement>,
-        label?: JQuery<HTMLElement>,
-        content?: FormElement[],
-        container?: JQuery<HTMLElement>,
-        postProcessing?: (wrapper: JQuery<HTMLElement>) => void) {
+        private readonly wrapper: JQuery<HTMLElement>,
+        private readonly input?: JQuery<HTMLElement>,
+        private readonly label?: JQuery<HTMLElement>,
+        private readonly content: FormElement[] = [],
+        private readonly container: JQuery<HTMLElement> = wrapper,
+        private readonly postProcessing?: (wrapper: JQuery<HTMLElement>) => void) {
 
         this.wrapper = wrapper;
         this.input = input;
         this.label = label;
-        this.content = content ? content : [];
-        this.container = container ? container : wrapper;
+        this.content = content;
+        this.container = container;
 
-        this.postProcessing = postProcessing ? postProcessing : (): void => { return; };
+        this.postProcessing = postProcessing;
     }
 
-    public getInput(): JQuery<HTMLElement> {
+    public getInput(): JQuery<HTMLElement> | undefined {
         return this.input;
     }
 
@@ -1098,7 +1102,7 @@ export class FormElement {
                 }
             }
 
-            this.postProcessing(this.wrapper);
+            this.postProcessing?.(this.wrapper);
 
             this.created = true;
         }

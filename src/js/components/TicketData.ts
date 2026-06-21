@@ -3,6 +3,7 @@ import Component from "./Component";
 
 /**
  * This is empty?!?!
+ * TODO: Remove
  */
 export default class TicketData extends Component {
 
@@ -17,7 +18,7 @@ export default class TicketData extends Component {
 
 
 
-        return;
+        return Promise.resolve();
     }
 
 }
