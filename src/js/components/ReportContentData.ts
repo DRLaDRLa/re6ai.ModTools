@@ -165,7 +165,7 @@ export default class ReportContentData extends Component {
     replacer(flexBox);
 
     const dText = await (await fetch(`/dtext_preview.json?body=${encodeURIComponent(data.body)}&allow_color="false"`, { method: "POST", "body": JSON.stringify({ "body": data.body, "allow_color": "false" }), headers: {
-      "User-Agent": `${XM.Info.script.name}/${XM.Info.script.version} (by ${XM.Info.script.author} on e621)`,
+      "User-Agent": `${XM.Info.script.name}/${XM.Info.script.version} (by ${XM.Info.script.author} on e6ai)`,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       "X-CSRF-Token": document.querySelector("meta[name=csrf-token]")!.getAttribute("content") ?? "",
     } })).json();
