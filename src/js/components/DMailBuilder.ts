@@ -12,11 +12,14 @@ interface StoredButton extends TemplateData {
 	text?: string;
 }
 
+const DEFAULT_GREETING = "Hi %recipientName%,\n\n";
+
 export default class DMailBuilder extends Component {
-	public Settings: { enabled: boolean; buttons: StoredButton[]; insertMode: "replace" | "insert"; } = {
+	public Settings: { enabled: boolean; buttons: StoredButton[]; insertMode: "replace" | "insert"; greeting: string } = {
 		enabled: true,
 		buttons: DMailBuilder.defaultTemplates,
-    insertMode: "insert",
+		insertMode: "insert",
+		greeting: DEFAULT_GREETING,
 	};
 
 	private builder?: TemplateBuilder;
@@ -49,6 +52,21 @@ export default class DMailBuilder extends Component {
 				body: b.body ?? b.text ?? "",
 			})),
 			setTemplates: (next) => { this.Settings.buttons = next; },
+			transform: (template) => {
+				const greeting = this.Settings.greeting;
+				const text = greeting.includes("%body%")
+					? greeting.replace("%body%", template.body)
+					: `${greeting}${template.body}`;
+				// This is initially empty, so we load it on insertion
+				const recipientName = (document.getElementById("dmail_to_name") as HTMLInputElement | undefined)?.value ?? "";
+				return text.replace(/%recipientName%/g, recipientName);
+			},
+			pinnedChip: {
+				title: "Greeting",
+				getBody: () => this.Settings.greeting,
+				setBody: (body) => { this.Settings.greeting = body; },
+				defaultBody: DEFAULT_GREETING,
+			},
 		});
 		this.builder.mount();
 		return Promise.resolve();
