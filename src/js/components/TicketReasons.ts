@@ -37,7 +37,7 @@ export default class TicketReasons extends Component {
 			{ title: "Handled", body: "This ticket has been handled, thank you!" },
 			{ title: "Reviewed", body: "This ticket has been reviewed, thank you!" },
 			{ title: "NAT", body: "Thank you for the heads-up! We've reviewed the ticket and completed our investigation into the matter; however, we've decided it does not warrant action at this time." },
-			{ title: "Reply", body: "I believe that you tried to reply to a comment, but reported it instead.\nPlease, be more careful in the future." },
+			{ title: "Reply", body: "Looks like you accidentally pressed report instead of reply. No worries, it happens!" },
 			{ title: "Already (Rec)", body: "Thank you for your report, but this user has already received a record for this matter." },
 			{ title: "Already (Ban)", body: "Thank you for your report, but this user is already banned." },
 			{ title: "Blacklist", body: 'Thank you for your report, but this post\'s content does not violate our "uploading guidelines":[/help/uploading_guidelines].\nIf you find the contents of the post objectionable, we\'d ask you to add the relevant tags (or the post\'s id itself) to your "blacklist":[/help/blacklist].' },
